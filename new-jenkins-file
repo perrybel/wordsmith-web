@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // You can also define SONAR_HOST_URL here if preferred
         SONAR_HOST_URL = 'http://18.206.163.162:9000'
         SONAR_PROJECT_KEY = 'assignement-project'
     }
@@ -29,13 +28,13 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    sh """
+                    sh '''
                         /opt/sonar-scanner/bin/sonar-scanner \
                           -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                           -Dsonar.sources=. \
                           -Dsonar.host.url=${SONAR_HOST_URL} \
-                          -Dsonar.login=${SONAR_TOKEN}
-                    """
+                          -Dsonar.login=$SONAR_TOKEN
+                    '''
                 }
             }
         }
