@@ -11,14 +11,26 @@ pipeline {
                 echo 'Building the application...'
                 sh '''
                     set -e
-
-                    # Only initialize the module if go.mod doesn't already exist
                     if [ ! -f go.mod ]; then
-                      go mod init wordsmith
+                      go mod init assignement-project
                     fi
-
                     go mod tidy
                     go build -v ./...
+                '''
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            environment {
+                SONAR_TOKEN = credentials('sonar-token')
+            }
+            steps {
+                sh '''
+                    /opt/sonar-scanner/bin/sonar-scanner \
+                      -Dsonar.projectKey=assignement-project \
+                      -Dsonar.sources=. \
+                      -Dsonar.host.url=http://18.206.163.162:9000 \
+                      -Dsonar.login=$SONAR_TOKEN
                 '''
             }
         }
