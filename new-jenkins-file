@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         GO111MODULE = 'on'
+        SONAR_TOKEN = credentials('sonar-token') // Global level
     }
 
     stages {
@@ -21,9 +22,6 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            environment {
-                SONAR_TOKEN = credentials('sonar-token')
-            }
             steps {
                 sh '''
                     /opt/sonar-scanner/bin/sonar-scanner \
