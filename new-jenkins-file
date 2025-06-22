@@ -1,18 +1,26 @@
 pipeline {
     agent any
+
+    environment {
+        GO111MODULE = 'on'
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                //Example build command
                 sh '''
-                    
-                    //go mod init wordsmith
+                    set -e
+
+                    # Only initialize the module if go.mod doesn't already exist
+                    if [ ! -f go.mod ]; then
+                      go mod init wordsmith
+                    fi
+
                     go mod tidy
-                    go build
+                    go build -v ./...
                 '''
             }
- 
         }
     }
 }
