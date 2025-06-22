@@ -7,7 +7,7 @@ pipeline {
                 //Example build command
                 sh '''
                     
-                    go mod init wordsmith
+                    //go mod init wordsmith
                     go mod tidy
                     go build
                 '''
